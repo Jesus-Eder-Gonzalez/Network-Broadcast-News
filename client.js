@@ -2,14 +2,16 @@
 
 const net = require('net');
 const readline = require('readline');
-let userName = '';
+
 let keyboardInput = readline.createInterface(process.stdin, process.stdout);
 keyboardInput.question('Create Username: ', clientCreate);
 
 function clientCreate(userName) {
-  let newsClient = net.createConnection(6969, '0.0.0.0');
-  console.log(newsClient.id);
-  newsClient.setEncoding('UTF8');
+  let newsClient = net.createConnection(6969, '0.0.0.0', () => {
+    newsClient.setEncoding('UTF8');
+    newsClient.write(`${userName?`ID: ${userName}`:''}`);
+  });
+
   newsClient.on('data', (data) => {
     process.stdout.write(data);
   });
